@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Type, Callable
+from typing import TYPE_CHECKING, Callable, Type
 
 if TYPE_CHECKING:
     from handler import BaseSocketHandler
@@ -24,6 +24,7 @@ def register_handler(*, namespace: str = "/") -> Callable[[Type["BaseSocketHandl
         return cls
 
     return decorator
+
 
 def get_handler_by_namespace(namespace: str) -> Type["BaseSocketHandler"] | None:
     for ns, handler_cls in handler_registry.get_handlers():

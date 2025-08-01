@@ -16,7 +16,7 @@ class BaseSocketHandler(ABC):
         self,
         sio: "AsyncServer",
         session_factory: "async_sessionmaker",
-        namespace: str = "/"
+        namespace: str = "/",
     ):
         self.sio = sio
         self.namespace = namespace

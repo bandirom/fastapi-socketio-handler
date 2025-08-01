@@ -1,5 +1,5 @@
-from typing import TYPE_CHECKING, Union, Optional
 import logging
+from typing import TYPE_CHECKING, Optional, Union
 
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
 
@@ -18,7 +18,7 @@ class SocketManager:
         self,
         *,
         socketio_path: str = "socket.io",
-        cors_allowed_origins: Union[str, list] = '*',
+        cors_allowed_origins: Union[str, list] = "*",
         async_mode: str = "asgi",
         async_session: Optional["async_sessionmaker"] = None,
         redis_url: str = None,

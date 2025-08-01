@@ -63,3 +63,15 @@ include = [
 ]
 
 [project.urls]
+
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+
+[tool.isort]
+multi_line_output = 3
+skip = ["venv"]
+line_length = 120
+include_trailing_comma = true
+profile = "black"
