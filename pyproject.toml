@@ -1,0 +1,65 @@
+[project]
+name = "fastapi-socketio-handler"
+version = "0.1.0"
+description = "Socket.IO wrapper for Python asyncio applications"
+
+authors = [
+    {name = "Nazarii",email = "bandirom@ukr.net"}
+]
+
+readme = "README.md"
+requires-python = ">=3.9"
+
+packages = [
+    { include = "socketio_handler" }
+]
+license = { file = "LICENSE" }
+
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: FastAPI",
+]
+
+keywords = [
+    "socketio",
+    "asyncio",
+    "websockets",
+    "python-socketio",
+    "asyncio-socketio",
+    "websockets-handler",
+    "fastapi",
+    "fastapi-socketio-handler",
+]
+
+dependencies = [
+    "python-socketio[asyncio] (>=5.13.0,<6.0.0)",
+    "fastapi",
+    "sqlalchemy (>=2.0.42,<3.0.0)"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest ~=8.3",
+    "pytest-cov ~=6.1",
+    "pytest-asyncio ~=0.26",
+    "black ~=25.1",
+    "isort ~=6.0",
+    "httpx ~=0.28",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+package-mode = true
+include = [
+    { path = "socketio_handler", format = "sdist" },
+    { path = "README.md", format = "sdist" },
+    { path = "LICENSE", format = "sdist" }
+]
+
+[project.urls]
