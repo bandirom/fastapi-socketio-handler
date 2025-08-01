@@ -27,7 +27,7 @@ pip install fastapi-socketio-handler
 ## 🚀 Quick Start
 
 
-1. Define a handler
+### 1. Define a handler
 
 ```python
 # app/chat_handler.py
@@ -55,7 +55,7 @@ class ChatSocketHandlers(BaseSocketHandler):
 ```
 
 
-2. Use with lifespan (recommended)
+### 2. Use with lifespan (recommended)
 ```python
 # lifespan.py
 
@@ -78,7 +78,7 @@ async def lifespan(app: FastAPI):
         yield
 ```
 
-3. Connect from frontend
+### 3. Connect from frontend
 ```js
 const socket = io('http://localhost:8000/chat', {
   auth: {
