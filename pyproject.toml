@@ -121,14 +121,12 @@ lint.select = [
 ]
 lint.ignore = []
 
-# Форматування імпортів (аналог isort)
 lint.fixable = ["I"]
 
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["S101"]
 
 [tool.ruff.format]
-# Працює як black, але легше інтегрується в CI
 quote-style = "preserve"
 indent-style = "space"
 line-ending = "auto"
