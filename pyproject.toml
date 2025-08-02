@@ -1,0 +1,133 @@
+[tool.poetry]
+name = "fastapi-socketio-handler"
+version = "0.1.0"
+description = "Socket.IO wrapper for FastApi applications"
+authors = ["Nazarii <bandirom@ukr.net>"]
+license = "MIT"
+readme = "README.md"
+packages = [{ include = "socketio_handler" }]
+homepage = "https://github.com/bandirom/fastapi-socketio-handler"
+repository = "https://github.com/bandirom/fastapi-socketio-handler"
+keywords = [
+    "socketio", "asyncio", "websockets", "python-socketio",
+    "asyncio-socketio", "websockets-handler", "fastapi"
+]
+classifiers = [
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Framework :: FastAPI",
+
+    "Topic :: Internet",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Communications :: Chat",
+]
+
+
+[tool.poetry.dependencies]
+python = ">=3.9"
+fastapi = "*"
+sqlalchemy = ">=2.0.42,<3.0.0"
+python-socketio = { extras = ["asyncio"], version = ">=5.13.0,<6.0.0" }
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "~=8.3"
+pytest-cov = "~=6.2"
+pytest-asyncio = "~=0.26"
+black = "~=25.1"
+httpx = "~=0.28"
+ruff = "~=0.12"
+python-socketio = { extras = ["asyncio-client"], version = ">=5.13.0,<6.0.0" }
+uvicorn = "~=0.35"
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+
+[tool.isort]
+multi_line_output = 3
+skip = ["venv"]
+line_length = 120
+include_trailing_comma = true
+profile = "black"
+
+[tool.pytest.ini_options]
+minversion = "8.0"
+addopts = "--log-level=INFO --strict-markers --tb=short --asyncio-mode=auto --cov --cov-report=xml --cov-report=lcov --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+python_files = ["test_*.py"]
+markers = [
+    "asyncio: mark a test as asyncio-compatible.",
+]
+
+[tool.coverage.run]
+branch = true
+source = ["socketio_handler"]
+omit = []
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+sort = "-Cover"
+
+exclude_lines = [
+  "^\\s*@(abc.)?abstractmethod",
+  "^\\s*@(typing.)?overload",
+  "^\\s*if (typing.)?TYPE_CHECKING:",
+  "^\\s*if (settings.)?DEBUG:",
+  "pragma: no ?cover",
+  "def __repr__",
+  "def __str__",
+  "raise AssertionError",
+  "raise NotImplementedError",
+  "if __name__ == .__main__.:",
+]
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+
+lint.select = [
+    "E", # pycodestyle errors
+    "W", # pycodestyle warnings
+    "F", # pyflakes
+    "I", # isort
+    "B", # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+]
+lint.ignore = []
+
+lint.fixable = ["I"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S101"]
+
+[tool.ruff.format]
+quote-style = "preserve"
+indent-style = "space"
+line-ending = "auto"
+skip-magic-trailing-comma = false
