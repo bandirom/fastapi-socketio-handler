@@ -9,8 +9,10 @@ from tests.conftest import FASTAPI_SERVER_HOST, FASTAPI_SERVER_PORT
 
 pytestmark = [pytest.mark.asyncio]
 
+SOCKETIO_NAMESPACE = "/test-1"
 
-@register_handler(namespace="/test-1")
+
+@register_handler(namespace=SOCKETIO_NAMESPACE)
 class SocketTestHandler(BaseSocketHandler):
     def register_events(self):
         self.sio.on("echo", self.event_echo, namespace=self.namespace)
@@ -49,21 +51,21 @@ async def test_socketio_integration(sio_client_factory, run_server_in_thread):
     received = {}
     client = sio_client_factory()
 
-    @client.on("connect_ack", namespace="/test-1")
+    @client.on("connect_ack", namespace=SOCKETIO_NAMESPACE)
     async def on_connect_ack(data):
         received["connect"] = data
 
-    @client.on("echo_response", namespace="/test-1")
+    @client.on("echo_response", namespace=SOCKETIO_NAMESPACE)
     async def on_echo_response(data):
         received["echo"] = data
 
     await client.connect(
         f"http://{FASTAPI_SERVER_HOST}:{FASTAPI_SERVER_PORT}",
         socketio_path="socket.io",
-        namespaces=["/test-1"],
+        namespaces=[SOCKETIO_NAMESPACE],
     )
 
-    await client.emit("echo", {"msg": "hello"}, namespace="/test-1")
+    await client.emit("echo", {"msg": "hello"}, namespace=SOCKETIO_NAMESPACE)
 
     for _ in range(10):
         if "connect" in received and "echo" in received:
