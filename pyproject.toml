@@ -12,6 +12,7 @@ keywords = [
     "socketio", "asyncio", "websockets", "python-socketio",
     "asyncio-socketio", "websockets-handler", "fastapi"
 ]
+
 classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
@@ -32,6 +33,10 @@ classifiers = [
     "Topic :: Communications :: Chat",
 ]
 
+[project.urls]
+homepage = "https://github.com/bandirom/fastapi-socketio-handler"
+issues = "https://github.com/bandirom/fastapi-socketio-handler/issues"
+changelog = "https://github.com/bandirom/fastapi-socketio-handler/blob/main/CHANGELOG.md"
 
 [tool.poetry.dependencies]
 python = ">=3.9"
@@ -103,12 +108,9 @@ exclude_lines = [
 [tool.coverage.xml]
 output = "coverage.xml"
 
-
 [tool.ruff]
 line-length = 120
 target-version = "py39"
-
-
 lint.select = [
     "E", # pycodestyle errors
     "W", # pycodestyle warnings
@@ -119,11 +121,7 @@ lint.select = [
     "UP", # pyupgrade
 ]
 lint.ignore = []
-
 lint.fixable = ["I"]
-
-[tool.ruff.lint.per-file-ignores]
-"tests/*" = ["S101"]
 
 [tool.ruff.format]
 quote-style = "preserve"
