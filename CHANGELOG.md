@@ -7,6 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [v0.1.1] - 2025-08-03
+
+### Added
+- New tests for handler registration and manager lifecycle
+- Improved `README.md` with usage examples, lifespan setup, and frontend integration
+- Added contributing guidelines in `CONTRIBUTING.md`
+
+### Changed
+- Moved `SQLAlchemy` from runtime to dev dependencies (used only for type hints)
+
+---
+
 ## [0.1.0] - 2025-08-03
 
 ### Added

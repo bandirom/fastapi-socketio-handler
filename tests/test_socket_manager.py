@@ -1,8 +1,8 @@
 import pytest
 import socketio
 
-from socketio_handler import BaseSocketHandler
-from socketio_handler.socket_registry import handler_registry, register_handler
+from socketio_handler import BaseSocketHandler, SocketManager
+from socketio_handler.socket_registry import get_handler_by_namespace, handler_registry, register_handler
 
 pytestmark = [pytest.mark.asyncio]
 
@@ -46,3 +46,23 @@ async def test_register_handler_decorator():
     handler = handler_registry.get_handler('/test')
     assert handler.namespace == '/test'
     assert handler.handler_cls is TestHandler
+
+
+async def test_get_handler_by_namespace():
+
+    @register_handler(namespace="/abc")
+    class ABCHandler(BaseSocketHandler):
+        async def connect(self, sid, environ, auth=None):
+            pass
+
+        async def event_message(self, sid, data):
+            pass
+
+    handler = get_handler_by_namespace("/abc")
+    assert handler.namespace == '/abc'
+    assert handler.handler_cls is ABCHandler
+
+
+async def test_context_manager():
+    async with SocketManager() as manager:
+        assert isinstance(manager, SocketManager)
