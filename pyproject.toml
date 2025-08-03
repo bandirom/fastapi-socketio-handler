@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-socketio-handler"
-version = "0.1.1"
+version = "0.1.2"
 description = "Socket.IO wrapper for FastApi applications"
 authors = ["Nazarii <bandirom@ukr.net>"]
 license = "MIT"
