@@ -59,11 +59,6 @@ async def sio_client_factory() -> AsyncGenerator[Callable[[], AsyncClient], None
             await client.disconnect()
 
 
-class Mounted(NamedTuple):
-    socket_manager: SocketManager
-    fastapi_app: FastAPI
-
-
 @pytest.fixture()
 async def mounted_socket_manager(socket_manager_factory, fastapi_app):
     def factory(**kwargs: Unpack[SocketManagerKwargs]) -> SocketManager:
