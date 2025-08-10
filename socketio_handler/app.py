@@ -1,9 +1,10 @@
 import logging
-from typing import TYPE_CHECKING, Optional, Union
+from typing import TYPE_CHECKING, Optional, Union, Unpack, cast
 
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
 
 from .socket_registry import handler_registry
+from .types import SocketManagerKwargs
 
 if TYPE_CHECKING:
     from fastapi import FastAPI
@@ -22,11 +23,12 @@ class SocketManager:
         async_mode: str = "asgi",
         async_session: Optional["async_sessionmaker"] = None,
         redis_url: str = None,
-        **kwargs,
+        **kwargs: Unpack[SocketManagerKwargs],
     ):
         if redis_url:
             logger.info("[sio] Using Redis manager")
-            kwargs["client_manager"] = AsyncRedisManager(redis_url)
+            cast(dict[str, AsyncRedisManager], kwargs)["client_manager"] = AsyncRedisManager(redis_url)
+
         self._sio = AsyncServer(async_mode=async_mode, cors_allowed_origins=cors_allowed_origins, **kwargs)
         self._app = ASGIApp(socketio_server=self._sio, socketio_path=socketio_path)
         self.session_factory = async_session
@@ -45,15 +47,15 @@ class SocketManager:
         """Returns the SocketIO server instance."""
         return self._sio
 
-    def register_events(self):
+    def register_handlers(self):
         if self.__registered:
             logger.warning("[sio] Events already registered. Skipping.")
             return
         logger.info("[sio] Registering event handlers")
-        for namespace, handler_entry in handler_registry.handlers.items():
-            logger.debug(f"[sio] Registering handler: {handler_entry.handler_cls.__name__} for namespace: {namespace}")
-            handler = handler_entry.handler_cls(self._sio, session_factory=self.session_factory, namespace=namespace)
-            handler.register_events()
+        for namespace, handler_cls in handler_registry.handlers.items():
+            logger.debug(f"[sio] Registering handler: {handler_cls.__name__} for namespace: {namespace}")
+            handler = handler_cls(self._sio, session_factory=self.session_factory, namespace=namespace)
+            self._sio.register_namespace(handler)
         self.__registered = True
 
     async def __aenter__(self):
@@ -62,3 +64,4 @@ class SocketManager:
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         logger.info("[sio] exiting async context")
+        await self._sio.shutdown()

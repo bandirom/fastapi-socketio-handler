@@ -33,7 +33,7 @@ classifiers = [
     "Topic :: Communications :: Chat",
 ]
 
-[project.urls]
+[tool.poetry.urls]
 homepage = "https://github.com/bandirom/fastapi-socketio-handler"
 issues = "https://github.com/bandirom/fastapi-socketio-handler/issues"
 changelog = "https://github.com/bandirom/fastapi-socketio-handler/blob/main/CHANGELOG.md"
