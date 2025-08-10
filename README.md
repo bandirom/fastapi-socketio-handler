@@ -38,19 +38,15 @@ from socketio_handler import BaseSocketHandler, register_handler
 @register_handler(namespace="/chat")
 class ChatSocketHandlers(BaseSocketHandler):
 
-    def register_events(self):
-        self.sio.on("typing", self.event_typing, namespace=self.namespace)
-        self.sio.on("stop_typing", self.event_stop_typing, namespace=self.namespace)
-
-    async def connect(self, sid: str, environ: dict, auth: dict = None):
+    async def on_connect(self, sid: str, environ: dict, auth: dict = None):
         if not auth or "token" not in auth:
             return False  # Reject connection
         return True
 
-    async def event_typing(self, sid: str, data: dict, *args):
+    async def on_typing(self, sid: str, data: dict, *args):
         print(f'Typing event from {sid}: {data}', args)
 
-    async def event_stop_typing(self, sid: str, data: dict, *args):
+    async def on_stop_typing(self, sid: str, data: dict, *args):
         print(f'StopTyping event from {sid}: {data}', args)
 ```
 
@@ -92,7 +88,7 @@ async def lifespan(app: "FastAPI"):
         ) as socket_manager,
     ):
         socket_manager.mount_to_app(app)
-        socket_manager.register_events()
+        socket_manager.register_handlers()
         app.state.socket_manager = socket_manager
         yield
 ```
