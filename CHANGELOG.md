@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.2.0] - 2025-08-10
 
 ### Changed
+- **Breaking:** Dropped support for Python 3.9 and 3.10.  
+  Now only Python 3.11–3.13 are supported.
 - **BaseSocketHandler** now inherits from [`socketio.AsyncNamespace`](https://python-socketio.readthedocs.io/en/latest/api.html#socketio.AsyncNamespace) instead of a custom base class.
   - Simplifies integration with the official Socket.IO API.
   - Native support for standard events (`on_connect`, `on_disconnect`, etc.) without extra boilerplate.

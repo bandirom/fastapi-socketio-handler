@@ -2,7 +2,7 @@ import time
 from collections.abc import AsyncGenerator
 from contextlib import contextmanager
 from threading import Thread
-from typing import Callable, NamedTuple, Unpack
+from typing import Callable, Unpack
 
 import pytest
 from fastapi import FastAPI
