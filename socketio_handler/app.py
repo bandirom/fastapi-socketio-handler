@@ -1,10 +1,10 @@
 import logging
-from typing import TYPE_CHECKING, Optional, Union, Unpack, cast
+from typing import TYPE_CHECKING, Optional, Unpack, cast
 
 from socketio import ASGIApp, AsyncRedisManager, AsyncServer
 
 from .socket_registry import handler_registry
-from .types import SocketManagerKwargs
+from .types import InstrumentDTO, SocketManagerKwargs
 
 if TYPE_CHECKING:
     from fastapi import FastAPI
@@ -19,12 +19,15 @@ class SocketManager:
         self,
         *,
         socketio_path: str = "socket.io",
-        cors_allowed_origins: Union[str, list] = "*",
+        cors_allowed_origins: list[str] = None,
         async_mode: str = "asgi",
         async_session: Optional["async_sessionmaker"] = None,
         redis_url: str = None,
+        instrument: Optional[InstrumentDTO] = None,
         **kwargs: Unpack[SocketManagerKwargs],
     ):
+        if cors_allowed_origins is None:
+            cors_allowed_origins = []
         if redis_url:
             logger.info("[sio] Using Redis manager")
             cast(dict[str, AsyncRedisManager], kwargs)["client_manager"] = AsyncRedisManager(redis_url)
@@ -32,11 +35,15 @@ class SocketManager:
         self._sio = AsyncServer(async_mode=async_mode, cors_allowed_origins=cors_allowed_origins, **kwargs)
         self._app = ASGIApp(socketio_server=self._sio, socketio_path=socketio_path)
         self.session_factory = async_session
+
+        if instrument:
+            self._sio.instrument(**instrument)
+
         self.__registered = False
         logger.debug("[sio] SocketManager initialized")
 
     def mount_to_app(self, fastapi_app: "FastAPI", mount_location: str = "/socket.io/") -> None:
-        """Sets the FastAPI application instance."""
+        """Set FastAPI application instance."""
         fastapi_app.mount(mount_location, self._app)
         fastapi_app.sio = self._sio
         fastapi_app.state.socket_manager = self
