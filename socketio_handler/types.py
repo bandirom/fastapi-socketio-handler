@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, Literal, NamedTuple, Optional, TypedDict
+from typing import TYPE_CHECKING, Literal, NamedTuple, TypedDict
 
 if TYPE_CHECKING:
     from socketio_handler.handler import BaseSocketHandler
@@ -9,8 +9,13 @@ class HandlerEntry(NamedTuple):
     handler_cls: type["BaseSocketHandler"]
 
 
-class InstrumentKwargs(TypedDict, total=False):
-    auth: dict[str, str]
+class InstrumentAuthDTO(TypedDict):
+    username: str
+    password: str
+
+
+class InstrumentDTO(TypedDict, total=False):
+    auth: InstrumentAuthDTO
     mode: Literal['development', 'production']
     read_only: bool
     server_id: str
@@ -19,4 +24,6 @@ class InstrumentKwargs(TypedDict, total=False):
 
 
 class SocketManagerKwargs(TypedDict, total=False):
-    instrument: Optional[InstrumentKwargs]
+    logger: bool
+    engineio_logger: bool
+    transports: list[Literal['polling', 'websocket']]
