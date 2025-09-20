@@ -47,3 +47,32 @@ async def test_socketio_integration(sio_client_factory, run_server_in_thread):
 
         assert received["connect"] == {"message": "connected"}
         assert received["echo"] == {"echoed": {"msg": "hello"}}
+
+
+async def test_handler_receives_services(socket_manager):
+    class PresenceService:
+        def __init__(self):
+            self.called = False
+
+        def mark_called(self):
+            self.called = True
+
+    @register_handler(namespace="/test")
+    class TestHandler(BaseSocketHandler):
+
+        @property
+        def presence(self) -> PresenceService:
+            return self.services["presence"]
+
+        async def on_connect(self, sid, environ, auth=None):
+            self.presence.mark_called()
+
+    presence = PresenceService()
+    socket_manager.register_handlers(presence=presence)
+    handler = socket_manager.get_namespace_handler("/test")
+    assert isinstance(handler, TestHandler)
+    assert handler.presence is presence
+    assert handler.services["presence"] is presence
+
+    await handler.on_connect("sid-1", environ={})
+    assert presence.called is True

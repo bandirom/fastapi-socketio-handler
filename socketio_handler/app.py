@@ -10,6 +10,9 @@ if TYPE_CHECKING:
     from fastapi import FastAPI
     from sqlalchemy.ext.asyncio import async_sessionmaker
 
+    from .handler import BaseSocketHandler
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -54,16 +57,24 @@ class SocketManager:
         """Returns the SocketIO server instance."""
         return self._sio
 
-    def register_handlers(self):
+    def register_handlers(self, **kwargs):
         if self.__registered:
             logger.warning("[sio] Events already registered. Skipping.")
             return
         logger.info("[sio] Registering event handlers")
         for namespace, handler_cls in handler_registry.handlers.items():
             logger.debug(f"[sio] Registering handler: {handler_cls.__name__} for namespace: {namespace}")
-            handler = handler_cls(self._sio, session_factory=self.session_factory, namespace=namespace)
+            handler = handler_cls(
+                sio=self._sio,
+                session_factory=self.session_factory,
+                namespace=namespace,
+                **kwargs,
+            )
             self._sio.register_namespace(handler)
         self.__registered = True
+
+    def get_namespace_handler(self, namespace: str) -> "BaseSocketHandler":
+        return self._sio.namespace_handlers[namespace]
 
     async def __aenter__(self):
         logger.info("[sio] entering async context")

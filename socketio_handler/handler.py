@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from socketio import AsyncNamespace
 
@@ -18,7 +18,9 @@ class BaseSocketHandler(AsyncNamespace):
         sio: "AsyncServer",
         session_factory: "async_sessionmaker",
         namespace: str = "/",
+        **services: Any,
     ):
         self.sio = sio
         self.session_factory = session_factory
+        self.services = services
         super().__init__(namespace)
