@@ -9,6 +9,7 @@ from .types import InstrumentDTO, SocketManagerKwargs
 if TYPE_CHECKING:
     from fastapi import FastAPI
     from sqlalchemy.ext.asyncio import async_sessionmaker
+
     from .handler import BaseSocketHandler
 
 

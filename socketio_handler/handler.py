@@ -1,5 +1,5 @@
 import logging
-from typing import TYPE_CHECKING, Optional, Any, cast
+from typing import TYPE_CHECKING, Any
 
 from socketio import AsyncNamespace
 
